@@ -117,7 +117,7 @@ def googleSearch(result):
     new_result = ""
 
     if "Since we couldn't find anything for " in result:
-        new_result = result[86:]
+        new_result = result[93:]
     else:
         new_result = result
     words = new_result.split()
