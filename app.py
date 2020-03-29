@@ -58,25 +58,25 @@ def random():
 
         for i in range(0, trivia):
             number = rand.randrange(maximum)
-            numbers.add(number)
+            numbers.append(number)
             info = requests.get("http://numbersapi.com/" + str(number) + "/trivia").text
             info = checkUninterestingNumbers(number, info, "trivia")
             response.append(info)
         for i in range(0, math):
             number = rand.randrange(maximum)
-            numbers.add(number)
+            numbers.append(number)
             info = requests.get("http://numbersapi.com/" + str(number) + "/math").text
             info = checkUninterestingNumbers(number, info, "math")
             response.append(info)
         for i in range(0, date):
             number = rand.randrange(maximum)
-            numbers.add(number)
+            numbers.append(number)
             info = requests.get("http://numbersapi.com/" + str(number) + "/date").text
             info = checkUninterestingNumbers(number, info, "date")
             response.append(info)
         for i in range(0, year):
             number = rand.randrange(maximum)
-            numbers.add(number)
+            numbers.append(number)
             info = requests.get("http://numbersapi.com/" + str(number) + "/year").text
             info = checkUninterestingNumbers(number, info, "year")
             response.append(info)
