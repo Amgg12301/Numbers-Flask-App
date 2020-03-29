@@ -46,13 +46,58 @@ def random():
         numbers = []
         urls = []
         number = 0
-        total = trivia + math + date + year
+        current_total = trivia + math + date + year
 
-        if amount != total:
-            if amount > total:
-                trivia += (amount - total)
+        if current_total != amount:
+            difference = amount - current_total
+            if difference > 0:
+                minimum = min(trivia, math, date, year)
+                if minimum == trivia:
+                    trivia += difference
+                elif minimum == math:
+                    math += difference
+                elif minimum == date:
+                    date += difference
+                else:
+                    year += difference
+                current_total += difference
             else:
-                math -= (total - amount)
+                while current_total > amount:
+                    maximum = max(trivia, math, date, year)
+                    if maximum == trivia:
+                        temp = trivia
+                        trivia += difference
+                        if trivia < 0:
+                            trivia = 0
+                            current_total -= temp
+                        else:
+                            current_total += difference
+                    elif maximum == math:
+                        temp = math
+                        math += difference
+                        if math < 0:
+                            math = 0
+                            current_total -= temp
+                        else:
+                            current_total += difference
+                    elif maximum == date:
+                        temp = date
+                        date += difference
+                        if date < 0:
+                            date = 0
+                            current_total -= temp
+                        else:
+                            current_total += difference
+                    else:
+                        temp = year
+                        year += difference
+                        if year < 0:
+                            year = 0
+                            current_total -= temp
+                        else:
+                            current_total += difference
+                    difference = amount - current_total
+
         if maximum == 0:
             maximum = 500
 
@@ -83,9 +128,10 @@ def random():
         for result in response:
             urls.append(googleSearch(result))
 
-        return render_template("random.html", response = response, urls = urls,
-                               response_and_urls = zip(response, urls), numbers = numbers)
+        return render_template("random.html", response=response, urls=urls,
+                               response_and_urls=zip(response, urls), numbers=numbers)
     return render_template("index.html")
+
 
 # Method for uninteresting numbers / numbers with no results
 def checkUninterestingNumbers(number, result, type):
