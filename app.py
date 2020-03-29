@@ -1,4 +1,5 @@
-import requests, random as rand
+import random as rand
+import requests
 from flask import Flask, render_template, request
 
 app = Flask(__name__)
@@ -17,7 +18,6 @@ def results():
         fact_types = request.form.getlist('fact')
         response = []
         urls = []
-        result = ""
 
         for fact in fact_types:
             result = requests.get("http://numbersapi.com/" + str(number) + "/" + fact.lower()).text
@@ -29,6 +29,7 @@ def results():
 
         return render_template("results.html", response=response, number=number, urls=urls,
                                response_and_urls=zip(response, urls))
+    return render_template("index.html")
 
 
 # Random numbers, fact categories, and results if requested for
@@ -42,8 +43,8 @@ def random():
         date = int(request.form['randomdate'])
         year = int(request.form['randomyear'])
         response = []
+        numbers = []
         urls = []
-        info = ""
         number = 0
         total = trivia + math + date + year
 
@@ -57,36 +58,34 @@ def random():
 
         for i in range(0, trivia):
             number = rand.randrange(maximum)
-            print(number)
+            numbers.add(number)
             info = requests.get("http://numbersapi.com/" + str(number) + "/trivia").text
             info = checkUninterestingNumbers(number, info, "trivia")
             response.append(info)
         for i in range(0, math):
             number = rand.randrange(maximum)
-            print(number)
+            numbers.add(number)
             info = requests.get("http://numbersapi.com/" + str(number) + "/math").text
-            print(info)
             info = checkUninterestingNumbers(number, info, "math")
-            print(info)
             response.append(info)
         for i in range(0, date):
             number = rand.randrange(maximum)
-            print(number)
+            numbers.add(number)
             info = requests.get("http://numbersapi.com/" + str(number) + "/date").text
             info = checkUninterestingNumbers(number, info, "date")
             response.append(info)
         for i in range(0, year):
             number = rand.randrange(maximum)
-            print(number)
+            numbers.add(number)
             info = requests.get("http://numbersapi.com/" + str(number) + "/year").text
             info = checkUninterestingNumbers(number, info, "year")
             response.append(info)
         for result in response:
             urls.append(googleSearch(result))
 
-        return render_template("random.html", response=response, number=number, urls=urls,
-                               response_and_urls=zip(response, urls))
-
+        return render_template("random.html", response = response, urls = urls,
+                               response_and_urls = zip(response, urls), numbers = numbers)
+    return render_template("index.html")
 
 # Method for uninteresting numbers / numbers with no results
 def checkUninterestingNumbers(number, result, type):
